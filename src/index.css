@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  scroll-behavior: smooth;
+}
+
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/Syne-ExtraBold.woff2) format('woff2');
+}
