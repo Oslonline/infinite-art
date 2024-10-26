@@ -116,7 +116,7 @@ const App = () => {
       <div className="relative flex max-h-screen min-h-screen flex-col items-center justify-center p-2" id="intro">
         <div className="flex flex-col items-center gap-6 sm:gap-8 xl:gap-4">
           <img className="md:h-96" src="/hero.webp" alt="Art Intro" />
-          <h1 className="text-center font-syne text-3xl font-black lg:text-4xl xl:text-5xl 2xl:text-6xl">Discover Random Art Pieces</h1>
+          <h1 className="text-center font-syne text-3xl font-black lg:text-4xl xl:text-5xl 2xl:text-6xl">Discover Random Artworks</h1>
           <div className="flex flex-wrap justify-center gap-2 md:w-2/3">
             <button
               className={`rounded border px-2 py-0.5 md:px-4 md:py-1 ${selectedDepartments.includes(0) ? "border-gray-700" : "border-gray-300 bg-gray-200"}`}
