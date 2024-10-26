@@ -174,7 +174,7 @@ const App = () => {
           : null}
       </div>
 
-      {isModalOpen && <ImageViewer src={selectedImage} onClose={closeModal} />}
+      {isModalOpen && <ImageViewer isOpen={isModalOpen} imageUrl={selectedImage} onClose={closeModal} />} 
     </div>
   );
 };

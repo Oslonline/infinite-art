@@ -42,7 +42,7 @@ const ImageViewer = ({ isOpen, imageUrl, onClose }) => {
     });
   };
 
-  const updateTransformOrigin = (cursorX, cursorY, scale) => {
+  const updateTransformOrigin = (cursorX, cursorY) => {
     const img = document.querySelector(".modal-image");
     if (img) {
       const rect = img.getBoundingClientRect();
