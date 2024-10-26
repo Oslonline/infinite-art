@@ -161,11 +161,20 @@ const App = () => {
           ? artworks.map((artwork, index) => (
               <div key={artwork.objectID} className={`flex flex-col gap-4 px-5 py-20 md:flex-row md:gap-6 md:px-10 md:py-32 ${index % 2 === 0 ? "" : "items-end bg-white md:flex-row-reverse"}`}>
                 <img src={artwork.primaryImageSmall} onClick={() => handleImageClick(artwork.primaryImage)} alt={artwork.title} className="aspect-auto max-h-80 cursor-pointer md:max-h-96" />
-                <div className={`flex flex-col justify-end ${index % 2 === 0 ? "text-start" : "text-end"}`}>
+                <div className={`flex flex-col justify-end ${index % 2 === 0 ? "text-start" : "items-end text-end"}`}>
                   {selectedDepartments.includes(0) && <p className="text-sm italic text-gray-600">{artwork.department}</p>}
                   <h2 className="font-syne text-xl md:text-2xl lg:text-3xl">{artwork.title}</h2>
-                  <h3 className="font-imperial text-2xl text-gray-800">{artwork.artistDisplayName || "Unknown Artist"}</h3>
+                  <div className="w-fit">
+                    <hr className="my-2 w-full" />
+                    <h3 className="font-imperial text-2xl text-gray-800">{artwork.artistDisplayName || "Unknown Artist"}</h3>
+                  </div>
                   <h4 className="text-sm text-gray-600 md:text-base">{artwork.objectDate || "Unknown Date"}</h4>
+                  <div className="w-fit">
+                    <hr className="my-2 w-full" />
+                    <a className="font-syne text-sm" target="_blank" href={artwork.objectURL}>
+                      {`${index % 2 === 0 ? "► " : ""}Learn more${index % 2 === 0 ? "" : " ►"}`}
+                    </a>
+                  </div>
                 </div>
               </div>
             ))
