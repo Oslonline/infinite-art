@@ -160,12 +160,10 @@ const App = () => {
         {showArtworks && artworks.length > 0
           ? artworks.map((artwork, index) => (
               <div key={artwork.objectID} className={`flex flex-col gap-4 px-5 py-20 md:flex-row md:gap-6 md:px-10 md:py-32 ${index % 2 === 0 ? "" : "items-end bg-white md:flex-row-reverse"}`}>
-                <div className="w-fit" onClick={() => handleImageClick(artwork.primaryImage)}>
-                  <img src={artwork.primaryImageSmall} alt={artwork.title} className="h-72 w-full cursor-pointer md:h-96" />
-                </div>
+                <img src={artwork.primaryImageSmall} onClick={() => handleImageClick(artwork.primaryImage)} alt={artwork.title} className="aspect-auto max-h-80 cursor-pointer md:max-h-96" />
                 <div className={`flex flex-col justify-end ${index % 2 === 0 ? "text-start" : "text-end"}`}>
                   {selectedDepartments.includes(0) && <p className="text-sm italic text-gray-600">{artwork.department}</p>}
-                  <h2 className="font-syne text-xl md:text-2xl">{artwork.title}</h2>
+                  <h2 className="font-syne text-xl md:text-2xl lg:text-3xl">{artwork.title}</h2>
                   <h3 className="font-imperial text-2xl text-gray-800">{artwork.artistDisplayName || "Unknown Artist"}</h3>
                   <h4 className="text-sm text-gray-600 md:text-base">{artwork.objectDate || "Unknown Date"}</h4>
                 </div>
@@ -174,7 +172,7 @@ const App = () => {
           : null}
       </div>
 
-      {isModalOpen && <ImageViewer isOpen={isModalOpen} imageUrl={selectedImage} onClose={closeModal} />} 
+      {isModalOpen && <ImageViewer isOpen={isModalOpen} imageUrl={selectedImage} onClose={closeModal} />}
     </div>
   );
 };
