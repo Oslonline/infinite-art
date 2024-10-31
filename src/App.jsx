@@ -19,6 +19,7 @@ const App = () => {
   const [showArtworks, setShowArtworks] = useState(false);
   const [allWantedObjects, setAllWantedObjects] = useState([]);
   const loadMoreRef = useRef(false);
+  const firstArtworkRef = useRef(null);
 
   useEffect(() => {
     const fetchAllWantedObjects = async () => {
@@ -32,7 +33,7 @@ const App = () => {
         const response = await fetch("/all_wanted_objects.json");
         const data = await response.json();
         setAllWantedObjects(data);
-        
+
         localStorage.setItem("allWantedObjects", JSON.stringify(data));
       } catch (error) {
         console.error("Error loading all_wanted_objects.json:", error);
@@ -118,6 +119,12 @@ const App = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [artworks, loading]);
 
+  const handleScrollToFirstArtwork = () => {
+    if (firstArtworkRef.current) {
+      firstArtworkRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div>
       {/* Introduction and Loading Section */}
@@ -151,7 +158,7 @@ const App = () => {
                 </g>
               </svg>
             ) : (
-              <svg width="30px" height="30px" viewBox="0 -5 24 24" version="1.1">
+              <svg width="30px" height="30px" viewBox="0 -5 24 24" version="1.1" onClick={handleScrollToFirstArtwork} style={{ cursor: "pointer" }}>
                 <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                   <g transform="translate(-572.000000, -1200.000000)" fill="#000000">
                     <path d="M595.688,1200.28 C595.295,1199.89 594.659,1199.89 594.268,1200.28 L583.984,1211.57 L573.702,1200.28 C573.31,1199.89 572.674,1199.89 572.282,1200.28 C571.89,1200.68 571.89,1201.32 572.282,1201.71 L583.225,1213.72 C583.434,1213.93 583.711,1214.02 583.984,1214 C584.258,1214.02 584.535,1213.93 584.745,1213.72 L595.688,1201.71 C596.079,1201.32 596.079,1200.68 595.688,1200.28"></path>
@@ -167,7 +174,11 @@ const App = () => {
       <div className="flex flex-col" id="artwork-container">
         {showArtworks && artworks.length > 0
           ? artworks.map((artwork, index) => (
-              <div key={artwork.objectID} className={`flex flex-col gap-4 px-5 py-20 md:flex-row md:gap-6 md:px-10 md:py-32 ${index % 2 === 0 ? "" : "items-end bg-white md:flex-row-reverse"}`}>
+              <div
+                key={artwork.objectID}
+                ref={index === 0 ? firstArtworkRef : null}
+                className={`flex flex-col gap-4 px-5 py-20 md:flex-row md:gap-6 md:px-10 md:py-32 ${index % 2 === 0 ? "" : "items-end bg-white md:flex-row-reverse"}`}
+              >
                 <img src={artwork.primaryImageSmall} onClick={() => handleImageClick(artwork.primaryImage)} alt={artwork.title} className="aspect-auto max-h-80 cursor-pointer md:max-h-96" />
                 <div className={`flex flex-col justify-end ${index % 2 === 0 ? "text-start" : "items-end text-end"}`}>
                   {selectedDepartments.includes(0) && <p className="text-sm italic text-gray-600">{artwork.department}</p>}
