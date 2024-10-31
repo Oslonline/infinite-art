@@ -18,14 +18,22 @@ const App = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [showArtworks, setShowArtworks] = useState(false);
   const [allWantedObjects, setAllWantedObjects] = useState([]);
-  const loadMoreRef = useRef(false); // Prevents overlapping fetches
+  const loadMoreRef = useRef(false);
 
   useEffect(() => {
     const fetchAllWantedObjects = async () => {
       try {
+        const cachedData = localStorage.getItem("allWantedObjects");
+        if (cachedData) {
+          setAllWantedObjects(JSON.parse(cachedData));
+          return;
+        }
+
         const response = await fetch("/all_wanted_objects.json");
         const data = await response.json();
         setAllWantedObjects(data);
+        
+        localStorage.setItem("allWantedObjects", JSON.stringify(data));
       } catch (error) {
         console.error("Error loading all_wanted_objects.json:", error);
       }
