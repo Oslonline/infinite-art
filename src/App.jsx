@@ -24,6 +24,7 @@ const App = () => {
   const [userConsent, setUserConsent] = useState(false);
   const [savedArtworks, setSavedArtworks] = useState([]);
   const [pulseConsent, setPulseConsent] = useState(false);
+  const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
 
   useEffect(() => {
     scrollTo(0, 0);
@@ -144,25 +145,26 @@ const App = () => {
 
   const saveArtwork = (artwork) => {
     if (userConsent) {
-      const isSaved = savedArtworks.includes(artwork.objectID);
+      const isSaved = savedArtworks.some((saved) => saved.objectID === artwork.objectID);
       let updatedSavedArtworks;
 
       if (isSaved) {
-        updatedSavedArtworks = savedArtworks.filter((id) => id !== artwork.objectID);
+        updatedSavedArtworks = savedArtworks.filter((saved) => saved.objectID !== artwork.objectID);
       } else {
-        updatedSavedArtworks = [...savedArtworks, artwork.objectID];
+        updatedSavedArtworks = [
+          ...savedArtworks,
+          {
+            objectID: artwork.objectID,
+            primaryImageSmall: artwork.primaryImageSmall,
+            title: artwork.title,
+            objectURL: artwork.objectURL,
+            artistDisplayName: artwork.artistDisplayName || "Unknown Artist",
+          },
+        ];
       }
 
       setSavedArtworks(updatedSavedArtworks);
-      const savedArtworksData = JSON.parse(localStorage.getItem("savedArtworks")) || [];
-
-      if (isSaved) {
-        const updatedLocalStorage = savedArtworksData.filter((item) => item.objectID !== artwork.objectID);
-        localStorage.setItem("savedArtworks", JSON.stringify(updatedLocalStorage));
-      } else {
-        savedArtworksData.push(artwork);
-        localStorage.setItem("savedArtworks", JSON.stringify(savedArtworksData));
-      }
+      localStorage.setItem("savedArtworks", JSON.stringify(updatedSavedArtworks));
     } else {
       setPulseConsent(true);
       setTimeout(() => {
@@ -170,6 +172,29 @@ const App = () => {
       }, 1475);
     }
   };
+
+  const toggleFavoritesModal = () => {
+    setIsFavoritesModalOpen(!isFavoritesModalOpen);
+
+    if (!isFavoritesModalOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  };
+
+  const removeArtworkFromFavorites = (artworkID) => {
+    const updatedSavedArtworks = savedArtworks.filter((artwork) => artwork.objectID !== artworkID);
+    setSavedArtworks(updatedSavedArtworks);
+    localStorage.setItem("savedArtworks", JSON.stringify(updatedSavedArtworks));
+  };
+
+  useEffect(() => {
+    const savedArtworksFromStorage = localStorage.getItem("savedArtworks");
+    if (savedArtworksFromStorage) {
+      setSavedArtworks(JSON.parse(savedArtworksFromStorage));
+    }
+  }, []);
 
   return (
     <div>
@@ -228,7 +253,7 @@ const App = () => {
                 <div className="relative">
                   {/* Save Artwork Button */}
                   <button className={`group absolute ${index % 2 === 0 ? "left-0" : "md:right-2"} top-2 ml-2 w-fit rounded bg-white p-1 active:scale-95`} onClick={() => saveArtwork(artwork)}>
-                    <svg className={`h-5 ${savedArtworks.includes(artwork.objectID) ? "fill-black" : ""}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg className={`h-5 ${savedArtworks.some((saved) => saved.objectID === artwork.objectID) ? "fill-black" : ""}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
                         d="M5 6.2C5 5.07989 5 4.51984 5.21799 4.09202C5.40973 3.71569 5.71569 3.40973 6.09202 3.21799C6.51984 3 7.07989 3 8.2 3H15.8C16.9201 3 17.4802 3 17.908 3.21799C18.2843 3.40973 18.5903 3.71569 18.782 4.09202C19 4.51984 19 5.07989 19 6.2V21L12 16L5 21V6.2Z"
                         stroke="#000000"
@@ -274,6 +299,73 @@ const App = () => {
             <button onClick={() => handleConsent(false)} className="w-full rounded border border-gray-300 duration-150 hover:border-black">
               No
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Favorite artworks button */}
+      {userConsent && (
+        <button
+          className={`group fixed bottom-4 right-4 z-30 rounded-full border-2 bg-white p-3 duration-200 hover:border-black md:p-4 ${isFavoritesModalOpen ? "border-black" : "border-gray-400"}`}
+          onClick={toggleFavoritesModal}
+        >
+          {isFavoritesModalOpen ? (
+            <svg className="h-7 rotate-90 transform fill-gray-300 duration-200 group-hover:fill-black md:h-10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z"
+                fill="#0F0F0F"
+              />
+            </svg>
+          ) : (
+            <svg className="h-7 fill-gray-300 duration-200 group-hover:fill-black md:h-10" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
+              <path d="M192,24H96A16.01833,16.01833,0,0,0,80,40V56H64A16.01833,16.01833,0,0,0,48,72V224a8.00026,8.00026,0,0,0,12.65039,6.50977l51.34277-36.67872,51.35743,36.67872A7.99952,7.99952,0,0,0,176,224V184.6897l19.35059,13.82007A7.99952,7.99952,0,0,0,208,192V40A16.01833,16.01833,0,0,0,192,24Zm0,152.45508-16-11.42676V72a16.01833,16.01833,0,0,0-16-16H96V40h96Z" />
+            </svg>
+          )}
+        </button>
+      )}
+
+      {/* Favorites Modal */}
+      {isFavoritesModalOpen && (
+        <div className="fixed inset-0 z-20 flex items-center justify-center bg-gray-800 bg-opacity-50 p-4 pb-[90px] md:py-8 md:pb-8">
+          <div className="flex max-h-full w-full max-w-sm flex-col gap-4 overflow-y-auto rounded bg-white p-4 md:max-w-lg">
+            <p>Favorite Artworks</p>
+            <hr />
+            {savedArtworks.length > 0 ? (
+              savedArtworks.map((artwork) => (
+                <div key={artwork.objectID} className="flex gap-2">
+                  <div className="w-full rounded bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('${artwork.primaryImageSmall}')` }}>
+                    <div className="flex h-full w-full rounded bg-gray-200/30 p-2 md:p-4 backdrop-blur-sm">
+                      <div className="flex w-full flex-col gap-1 md:gap-2">
+                        <h3 className="font-semibold">{artwork.title}</h3>
+                        <p className="text-sm">{artwork.artistDisplayName}</p>
+                        <a href={artwork.objectURL} target="_blank" rel="noopener noreferrer" className="w-fit flex gap-1 items-end rounded bg-white px-1">
+                          <svg className="h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M10.0002 5H8.2002C7.08009 5 6.51962 5 6.0918 5.21799C5.71547 5.40973 5.40973 5.71547 5.21799 6.0918C5 6.51962 5 7.08009 5 8.2002V15.8002C5 16.9203 5 17.4801 5.21799 17.9079C5.40973 18.2842 5.71547 18.5905 6.0918 18.7822C6.5192 19 7.07899 19 8.19691 19H15.8031C16.921 19 17.48 19 17.9074 18.7822C18.2837 18.5905 18.5905 18.2839 18.7822 17.9076C19 17.4802 19 16.921 19 15.8031V14M20 9V4M20 4H15M20 4L13 11"
+                              stroke="#000000"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                          <p>Learn more</p>
+                        </a>
+                      </div>
+                      <button onClick={() => removeArtworkFromFavorites(artwork.objectID)} className="flex p-2 hover:underline">
+                        <svg fill="#000000" className="h-8" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <g>
+                            <path d="M17.6,21.938a1.482,1.482,0,0,1-1.011-.4l-4.251-3.9a.5.5,0,0,0-.678,0L7.41,21.538a1.5,1.5,0,0,1-2.517-1.1V4.563a2.5,2.5,0,0,1,2.5-2.5h9.214a2.5,2.5,0,0,1,2.5,2.5V20.435a1.483,1.483,0,0,1-.9,1.375A1.526,1.526,0,0,1,17.6,21.938ZM12,16.5a1.5,1.5,0,0,1,1.018.395L17.269,20.8a.5.5,0,0,0,.838-.368V4.563a1.5,1.5,0,0,0-1.5-1.5H7.393a1.5,1.5,0,0,0-1.5,1.5V20.435a.5.5,0,0,0,.839.368L10.983,16.9A1.5,1.5,0,0,1,12,16.5Z" />
+                            <path d="M10.23,10.84a.5.5,0,0,0,.71.71L12,10.491,13.06,11.55a.523.523,0,0,0,.71,0,.513.513,0,0,0,0-.71L12.709,9.779,13.77,8.72a.5.5,0,0,0-.71-.71c-.35.35-.7.71-1.06,1.06L10.94,8.01a.5.5,0,0,0-.71,0,.524.524,0,0,0,0,.71c.35.35.71.7,1.06,1.06Z" />
+                          </g>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No favorite artworks yet.</p>
+            )}
           </div>
         </div>
       )}
