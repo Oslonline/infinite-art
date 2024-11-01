@@ -25,6 +25,7 @@ const App = () => {
   const [savedArtworks, setSavedArtworks] = useState([]);
   const [pulseConsent, setPulseConsent] = useState(false);
   const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
+  const [isScrollButtonVisible, setIsScrollButtonVisible] = useState(false);
 
   useEffect(() => {
     scrollTo(0, 0);
@@ -196,6 +197,22 @@ const App = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const artworkContainer = document.getElementById("artwork-container");
+      if (artworkContainer) {
+        const firstFourArtworks = artworkContainer.querySelectorAll("div:nth-child(-n+6)");
+        if (firstFourArtworks.length > 0) {
+          const fourthArtworkBottom = firstFourArtworks[3].getBoundingClientRect().bottom;
+          setIsScrollButtonVisible(fourthArtworkBottom < 0);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div>
       {/* Introduction and Loading Section */}
@@ -290,7 +307,7 @@ const App = () => {
 
       {/* Floating Consent Div */}
       {showConsent && (
-        <div className={`fixed bottom-4 right-4 z-0 flex max-w-full ml-4 flex-col gap-2 rounded border border-gray-300 bg-white p-4 md:max-w-fit ${pulseConsent ? "animate-bounce" : ""}`}>
+        <div className={`fixed bottom-4 right-4 z-0 ml-4 flex max-w-full flex-col gap-2 rounded border border-gray-300 bg-white p-4 md:max-w-fit ${pulseConsent ? "animate-bounce" : ""}`}>
           <p className="">Would you like us to remember the projects you like?</p>
           <div className="flex justify-between gap-2 text-center">
             <button onClick={() => handleConsent(true)} className="w-full rounded border border-gray-300 duration-150 hover:border-black">
@@ -304,25 +321,31 @@ const App = () => {
       )}
 
       {/* Favorite artworks button */}
-      {userConsent && (
-        <button
-          className={`group fixed bottom-4 right-4 z-30 rounded-full border-2 bg-white p-3 duration-200 hover:border-black md:p-4 ${isFavoritesModalOpen ? "border-black" : "border-gray-400"}`}
-          onClick={toggleFavoritesModal}
-        >
-          {isFavoritesModalOpen ? (
-            <svg className="h-7 rotate-90 transform fill-gray-300 duration-200 group-hover:fill-black md:h-10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z"
-                fill="#0F0F0F"
-              />
+      <div className="fixed bottom-4 right-4 z-30 flex gap-2">
+        {userConsent && (
+          <button
+            className={`group rounded border-2 border-black bg-white p-1.5 duration-200 hover:border-black md:p-2 ${isFavoritesModalOpen ? "" : "md:border-gray-400"}`}
+            onClick={toggleFavoritesModal}
+          >
+            {isFavoritesModalOpen ? (
+              <svg className="h-5 rotate-90 transform duration-200 group-hover:fill-black sm:h-6 md:h-7 md:fill-gray-300" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z" />
+              </svg>
+            ) : (
+              <svg className="h-6 fill-black duration-200 sm:h-6 md:h-7 md:fill-gray-300 md:group-hover:fill-black" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
+                <path d="M192,24H96A16.01833,16.01833,0,0,0,80,40V56H64A16.01833,16.01833,0,0,0,48,72V224a8.00026,8.00026,0,0,0,12.65039,6.50977l51.34277-36.67872,51.35743,36.67872A7.99952,7.99952,0,0,0,176,224V184.6897l19.35059,13.82007A7.99952,7.99952,0,0,0,208,192V40A16.01833,16.01833,0,0,0,192,24Zm0,152.45508-16-11.42676V72a16.01833,16.01833,0,0,0-16-16H96V40h96Z" />
+              </svg>
+            )}
+          </button>
+        )}
+        {isScrollButtonVisible && (
+          <button onClick={() => scrollTo(0, 0)} className="group rounded border-2 border-black bg-white p-1 duration-200 hover:border-black md:border-gray-400 md:p-2">
+            <svg className="h-6 stroke-black duration-200 sm:h-6 md:h-7 md:stroke-gray-300 md:group-hover:stroke-black" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 18V2m0 0l7 7m-7-7L3 9" />
             </svg>
-          ) : (
-            <svg className="h-7 fill-gray-300 duration-200 group-hover:fill-black md:h-10" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
-              <path d="M192,24H96A16.01833,16.01833,0,0,0,80,40V56H64A16.01833,16.01833,0,0,0,48,72V224a8.00026,8.00026,0,0,0,12.65039,6.50977l51.34277-36.67872,51.35743,36.67872A7.99952,7.99952,0,0,0,176,224V184.6897l19.35059,13.82007A7.99952,7.99952,0,0,0,208,192V40A16.01833,16.01833,0,0,0,192,24Zm0,152.45508-16-11.42676V72a16.01833,16.01833,0,0,0-16-16H96V40h96Z" />
-            </svg>
-          )}
-        </button>
-      )}
+          </button>
+        )}
+      </div>
 
       {/* Favorites Modal */}
       {isFavoritesModalOpen && (
