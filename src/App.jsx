@@ -20,8 +20,13 @@ const App = () => {
   const [allWantedObjects, setAllWantedObjects] = useState([]);
   const loadMoreRef = useRef(false);
   const firstArtworkRef = useRef(null);
+  const [showConsent, setShowConsent] = useState(true);
+  const [userConsent, setUserConsent] = useState(false);
+  const [savedArtworks, setSavedArtworks] = useState([]);
+  const [pulseConsent, setPulseConsent] = useState(false);
 
   useEffect(() => {
+    scrollTo(0, 0)
     const fetchAllWantedObjects = async () => {
       try {
         const cachedData = localStorage.getItem("allWantedObjects");
@@ -33,8 +38,6 @@ const App = () => {
         const response = await fetch("/all_wanted_objects.json");
         const data = await response.json();
         setAllWantedObjects(data);
-
-        localStorage.setItem("allWantedObjects", JSON.stringify(data));
       } catch (error) {
         console.error("Error loading all_wanted_objects.json:", error);
       }
@@ -125,6 +128,49 @@ const App = () => {
     }
   };
 
+  useEffect(() => {
+    const consent = localStorage.getItem("userConsent");
+    if (consent) {
+      setUserConsent(consent === "true");
+      setShowConsent(false);
+    }
+  }, []);
+
+  const handleConsent = (consent) => {
+    setUserConsent(consent);
+    setShowConsent(false);
+    localStorage.setItem("userConsent", consent);
+  };
+
+  const saveArtwork = (artwork) => {
+    if (userConsent) {
+      const isSaved = savedArtworks.includes(artwork.objectID);
+      let updatedSavedArtworks;
+
+      if (isSaved) {
+        updatedSavedArtworks = savedArtworks.filter((id) => id !== artwork.objectID);
+      } else {
+        updatedSavedArtworks = [...savedArtworks, artwork.objectID];
+      }
+
+      setSavedArtworks(updatedSavedArtworks);
+      const savedArtworksData = JSON.parse(localStorage.getItem("savedArtworks")) || [];
+
+      if (isSaved) {
+        const updatedLocalStorage = savedArtworksData.filter((item) => item.objectID !== artwork.objectID);
+        localStorage.setItem("savedArtworks", JSON.stringify(updatedLocalStorage));
+      } else {
+        savedArtworksData.push(artwork);
+        localStorage.setItem("savedArtworks", JSON.stringify(savedArtworksData));
+      }
+    } else {
+      setPulseConsent(true);
+      setTimeout(() => {
+        setPulseConsent(false);
+      }, 1475);
+    }
+  };
+
   return (
     <div>
       {/* Introduction and Loading Section */}
@@ -142,7 +188,7 @@ const App = () => {
             {departments.map((department) => (
               <button
                 key={department.id}
-                className={`rounded border px-2 py-0.5 md:px-4 md:py-1 ${selectedDepartments.includes(department.id) ? "border-gray-700" : "border-gray-300 bg-gray-200"}`}
+                className={`rounded border px-2 py-0.5 md:px-4 md:py-1 ${selectedDepartments.includes(department.id) ? "border-gray-700" : "border-gray-300 bg-gray-200 text-gray-800"}`}
                 onClick={() => handleDepartmentChange(department.id)}
               >
                 {department.name}
@@ -177,9 +223,22 @@ const App = () => {
               <div
                 key={artwork.objectID}
                 ref={index === 0 ? firstArtworkRef : null}
-                className={`flex flex-col gap-4 px-5 py-20 md:flex-row md:gap-6 md:px-10 md:py-32 ${index % 2 === 0 ? "" : "items-end bg-white md:flex-row-reverse"}`}
+                className={`relative mx-5 my-20 flex flex-col gap-4 md:mx-10 md:my-32 md:flex-row md:gap-6 ${index % 2 === 0 ? "" : "items-end bg-white md:flex-row-reverse"}`}
               >
+                {/* Save Artwork Button */}
+                <button className={`group absolute top-2 w-fit rounded bg-white p-1 active:scale-95 ${index % 2 === 0 ? "left-2" : "right-2"}`} onClick={() => saveArtwork(artwork)}>
+                  <svg className={`h-5 ${savedArtworks.includes(artwork.objectID) ? "fill-black" : ""}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M5 6.2C5 5.07989 5 4.51984 5.21799 4.09202C5.40973 3.71569 5.71569 3.40973 6.09202 3.21799C6.51984 3 7.07989 3 8.2 3H15.8C16.9201 3 17.4802 3 17.908 3.21799C18.2843 3.40973 18.5903 3.71569 18.782 4.09202C19 4.51984 19 5.07989 19 6.2V21L12 16L5 21V6.2Z"
+                      stroke="#000000"
+                      strokeWidth="2"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+                {/* Image */}
                 <img src={artwork.primaryImageSmall} onClick={() => handleImageClick(artwork.primaryImage)} alt={artwork.title} className="aspect-auto max-h-80 cursor-pointer md:max-h-96" />
+                {/* Text */}
                 <div className={`flex flex-col justify-end ${index % 2 === 0 ? "text-start" : "items-end text-end"}`}>
                   {selectedDepartments.includes(0) && <p className="text-sm italic text-gray-600">{artwork.department}</p>}
                   <h2 className="font-syne text-xl md:text-2xl lg:text-3xl">{artwork.title}</h2>
@@ -201,6 +260,21 @@ const App = () => {
       </div>
 
       {isModalOpen && <ImageViewer isOpen={isModalOpen} imageUrl={selectedImage} onClose={closeModal} />}
+
+      {/* Floating Consent Div */}
+      {showConsent && (
+        <div className={`fixed bottom-4 right-4 z-0 flex max-w-80 flex-col gap-2 rounded border border-gray-300 bg-white p-4 md:max-w-fit ${pulseConsent ? "animate-bounce" : ""}`}>
+          <p className="">Would you like us to remember the projects you like?</p>
+          <div className="flex justify-between gap-2 text-center">
+            <button onClick={() => handleConsent(true)} className="w-full rounded border border-gray-300 duration-150 hover:border-black">
+              Yes
+            </button>
+            <button onClick={() => handleConsent(false)} className="w-full rounded border border-gray-300 duration-150 hover:border-black">
+              No
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
