@@ -20,7 +20,7 @@ const App = () => {
   const [allWantedObjects, setAllWantedObjects] = useState([]);
   const loadMoreRef = useRef(false);
   const firstArtworkRef = useRef(null);
-  const [showConsent, setShowConsent] = useState(true);
+  const [showConsent, setShowConsent] = useState(false);
   const [userConsent, setUserConsent] = useState(false);
   const [savedArtworks, setSavedArtworks] = useState([]);
   const [pulseConsent, setPulseConsent] = useState(false);
@@ -167,6 +167,7 @@ const App = () => {
       setSavedArtworks(updatedSavedArtworks);
       localStorage.setItem("savedArtworks", JSON.stringify(updatedSavedArtworks));
     } else {
+      setShowConsent(true);
       setPulseConsent(true);
       setTimeout(() => {
         setPulseConsent(false);
@@ -320,7 +321,7 @@ const App = () => {
 
       {/* Floating Consent Div */}
       {showConsent && (
-        <div className={`fixed bottom-4 right-4 z-0 ml-4 flex max-w-full flex-col gap-2 rounded border border-gray-300 bg-white p-4 md:max-w-fit ${pulseConsent ? "animate-bounce" : ""}`}>
+        <div className={`fixed bottom-4 left-4 z-0 mr-4 flex max-w-full flex-col gap-2 rounded border border-gray-300 bg-white p-4 md:max-w-fit ${pulseConsent ? "animate-bounce hover:animate-none" : ""}`}>
           <p className="">Would you like us to remember the projects you like?</p>
           <div className="flex justify-between gap-2 text-center">
             <button onClick={() => handleConsent(true)} className="w-full rounded border border-gray-300 duration-150 hover:border-black">
