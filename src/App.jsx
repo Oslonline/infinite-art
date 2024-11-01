@@ -224,11 +224,11 @@ const App = () => {
             <h1 className="text-center font-syne text-3xl font-black lg:text-4xl xl:text-5xl 2xl:text-6xl">Discover Random Artworks</h1>
             <h2 className="text-center text-sm italic text-gray-900 sm:text-base">
               By{" "}
-              <a className="underline hover:text-blue-800" target="_blank" href="Oslo418">
+              <a className="underline hover:text-blue-800" target="_blank" href="https://oslo418.com">
                 Oslo418
               </a>{" "}
               with the{" "}
-              <a className="underline hover:text-blue-800" target="_blank" href="">
+              <a className="underline hover:text-blue-800" target="_blank" href="https://metmuseum.github.io/">
                 MetMuseum
               </a>{" "}
               api
@@ -321,7 +321,9 @@ const App = () => {
 
       {/* Floating Consent Div */}
       {showConsent && (
-        <div className={`fixed bottom-4 left-4 z-0 mr-4 flex max-w-full flex-col gap-2 rounded border border-gray-300 bg-white p-4 md:max-w-fit ${pulseConsent ? "animate-bounce hover:animate-none" : ""}`}>
+        <div
+          className={`fixed bottom-4 left-4 z-0 mr-4 flex max-w-full flex-col gap-2 rounded border border-gray-300 bg-white p-4 md:max-w-fit ${pulseConsent ? "animate-bounce hover:animate-none" : ""}`}
+        >
           <p className="">Would you like us to remember the projects you like?</p>
           <div className="flex justify-between gap-2 text-center">
             <button onClick={() => handleConsent(true)} className="w-full rounded border border-gray-300 duration-150 hover:border-black">
