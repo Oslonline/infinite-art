@@ -219,10 +219,23 @@ const App = () => {
       <div className="relative flex max-h-screen min-h-screen flex-col items-center justify-center p-2" id="intro">
         <div className="flex flex-col items-center gap-6 sm:gap-8 xl:gap-4">
           <img className="md:h-96" src="/hero.webp" alt="Art Intro" />
-          <h1 className="text-center font-syne text-3xl font-black lg:text-4xl xl:text-5xl 2xl:text-6xl">Discover Random Artworks</h1>
+          <div>
+            <h1 className="text-center font-syne text-3xl font-black lg:text-4xl xl:text-5xl 2xl:text-6xl">Discover Random Artworks</h1>
+            <h2 className="text-center text-sm italic text-gray-900 sm:text-base">
+              By{" "}
+              <a className="underline hover:text-blue-800" target="_blank" href="Oslo418">
+                Oslo418
+              </a>{" "}
+              with the{" "}
+              <a className="underline hover:text-blue-800" target="_blank" href="">
+                MetMuseum
+              </a>{" "}
+              api
+            </h2>
+          </div>
           <div className="flex flex-wrap justify-center gap-2 md:w-2/3">
             <button
-              className={`rounded border px-2 py-0.5 md:px-4 md:py-1 ${selectedDepartments.includes(0) ? "border-gray-700" : "border-gray-300 bg-gray-200 text-gray-800"}`}
+              className={`rounded border px-2 py-0.5 duration-150 hover:border-gray-600 md:px-4 md:py-1 ${selectedDepartments.includes(0) ? "border-gray-700" : "border-gray-300 bg-gray-200 text-gray-800"}`}
               onClick={() => handleDepartmentChange(0)}
             >
               All
@@ -230,7 +243,7 @@ const App = () => {
             {departments.map((department) => (
               <button
                 key={department.id}
-                className={`rounded border px-2 py-0.5 md:px-4 md:py-1 ${selectedDepartments.includes(department.id) ? "border-gray-700" : "border-gray-300 bg-gray-200 text-gray-800"}`}
+                className={`rounded border px-2 py-0.5 duration-150 hover:border-gray-600 md:px-4 md:py-1 ${selectedDepartments.includes(department.id) ? "border-gray-700" : "border-gray-300 bg-gray-200 text-gray-800"}`}
                 onClick={() => handleDepartmentChange(department.id)}
               >
                 {department.name}
@@ -267,7 +280,7 @@ const App = () => {
                 ref={index === 0 ? firstArtworkRef : null}
                 className={`mx-5 my-20 flex flex-col items-center gap-4 md:mx-10 md:my-32 md:flex-row md:items-end md:gap-6 ${index % 2 === 0 ? "" : "bg-white md:flex-row-reverse md:items-end"}`}
               >
-                <div className="relative">
+                <div className="relative h-fit">
                   {/* Save Artwork Button */}
                   <button className={`group absolute ${index % 2 === 0 ? "left-0" : "md:right-2"} top-2 ml-2 w-fit rounded bg-white p-1 active:scale-95`} onClick={() => saveArtwork(artwork)}>
                     <svg className={`h-5 ${savedArtworks.some((saved) => saved.objectID === artwork.objectID) ? "fill-black" : ""}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -280,7 +293,7 @@ const App = () => {
                     </svg>
                   </button>
                   {/* Image */}
-                  <img src={artwork.primaryImageSmall} onClick={() => handleImageClick(artwork.primaryImage)} alt={artwork.title} className="aspect-auto h-full cursor-pointer" />
+                  <img src={artwork.primaryImageSmall} onClick={() => handleImageClick(artwork.primaryImage)} alt={artwork.title} className="h-full max-h-96 cursor-pointer" />
                 </div>
                 {/* Text */}
                 <div className={`flex flex-col items-center justify-end text-center md:items-start ${index % 2 === 0 ? "md:text-start" : "md:items-end md:text-end"}`}>
@@ -320,8 +333,8 @@ const App = () => {
         </div>
       )}
 
-      {/* Favorite artworks button */}
-      <div className="fixed bottom-4 right-4 z-30 flex gap-2">
+      {/* Favorite artworks button & scrollToTop */}
+      <div className="fixed bottom-6 right-6 z-30 flex gap-2 md:bottom-4 md:right-4">
         {userConsent && (
           <button
             className={`group rounded border-2 border-black bg-white p-1.5 duration-200 hover:border-black md:p-2 ${isFavoritesModalOpen ? "" : "md:border-gray-400"}`}
