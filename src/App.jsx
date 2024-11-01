@@ -294,7 +294,17 @@ const App = () => {
                     </svg>
                   </button>
                   {/* Image */}
-                  <img src={artwork.primaryImageSmall} onClick={() => handleImageClick(artwork.primaryImage)} alt={artwork.title} className="h-full max-h-96 cursor-pointer" />
+                  <img
+                    src={artwork.primaryImageSmall}
+                    onClick={() => handleImageClick(artwork.primaryImage)}
+                    alt={artwork.title}
+                    className="hidden h-full max-h-96 cursor-pointer md:block"
+                  />
+                  <img
+                    src={artwork.primaryImageSmall}
+                    alt={artwork.title}
+                    className="block h-full max-h-96 cursor-default md:hidden"
+                  />
                 </div>
                 {/* Text */}
                 <div className={`flex flex-col items-center justify-end text-center md:items-start ${index % 2 === 0 ? "md:text-start" : "md:items-end md:text-end"}`}>
@@ -348,7 +358,7 @@ const App = () => {
                 <path d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z" />
               </svg>
             ) : (
-              <svg className="h-6 fill-black duration-200 sm:h-6 md:h-7 md:fill-gray-300 md:group-hover:fill-black" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
+              <svg className="h-6 fill-black duration-200 sm:h-6 md:h-7 md:fill-gray-300 md:group-hover:fill-black" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                 <path d="M192,24H96A16.01833,16.01833,0,0,0,80,40V56H64A16.01833,16.01833,0,0,0,48,72V224a8.00026,8.00026,0,0,0,12.65039,6.50977l51.34277-36.67872,51.35743,36.67872A7.99952,7.99952,0,0,0,176,224V184.6897l19.35059,13.82007A7.99952,7.99952,0,0,0,208,192V40A16.01833,16.01833,0,0,0,192,24Zm0,152.45508-16-11.42676V72a16.01833,16.01833,0,0,0-16-16H96V40h96Z" />
               </svg>
             )}
@@ -356,7 +366,7 @@ const App = () => {
         )}
         {isScrollButtonVisible && (
           <button onClick={() => scrollTo(0, 0)} className="group rounded border-2 border-black bg-white p-1 duration-200 hover:border-black md:border-gray-400 md:p-2">
-            <svg className="h-6 stroke-black duration-200 sm:h-6 md:h-7 md:stroke-gray-300 md:group-hover:stroke-black" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <svg className="h-6 stroke-black duration-200 sm:h-6 md:h-7 md:stroke-gray-300 md:group-hover:stroke-black" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 18V2m0 0l7 7m-7-7L3 9" />
             </svg>
           </button>
@@ -378,13 +388,12 @@ const App = () => {
                         <h3 className="font-semibold">{artwork.title}</h3>
                         <p className="text-sm">{artwork.artistDisplayName}</p>
                         <a href={artwork.objectURL} target="_blank" rel="noopener noreferrer" className="flex w-fit items-end gap-1 rounded bg-white px-1">
-                          <svg className="h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <svg className="h-5 stroke-black" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                               d="M10.0002 5H8.2002C7.08009 5 6.51962 5 6.0918 5.21799C5.71547 5.40973 5.40973 5.71547 5.21799 6.0918C5 6.51962 5 7.08009 5 8.2002V15.8002C5 16.9203 5 17.4801 5.21799 17.9079C5.40973 18.2842 5.71547 18.5905 6.0918 18.7822C6.5192 19 7.07899 19 8.19691 19H15.8031C16.921 19 17.48 19 17.9074 18.7822C18.2837 18.5905 18.5905 18.2839 18.7822 17.9076C19 17.4802 19 16.921 19 15.8031V14M20 9V4M20 4H15M20 4L13 11"
-                              stroke="#000000"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                             />
                           </svg>
                           <p>Learn more</p>
