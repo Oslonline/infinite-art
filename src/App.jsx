@@ -26,7 +26,7 @@ const App = () => {
   const [pulseConsent, setPulseConsent] = useState(false);
 
   useEffect(() => {
-    scrollTo(0, 0)
+    scrollTo(0, 0);
     const fetchAllWantedObjects = async () => {
       try {
         const cachedData = localStorage.getItem("allWantedObjects");
@@ -223,23 +223,25 @@ const App = () => {
               <div
                 key={artwork.objectID}
                 ref={index === 0 ? firstArtworkRef : null}
-                className={`relative mx-5 my-20 flex flex-col gap-4 md:mx-10 md:my-32 md:flex-row md:gap-6 ${index % 2 === 0 ? "" : "items-end bg-white md:flex-row-reverse"}`}
+                className={`mx-5 my-20 flex flex-col items-center gap-4 md:mx-10 md:my-32 md:flex-row md:items-end md:gap-6 ${index % 2 === 0 ? "" : "bg-white md:flex-row-reverse md:items-end"}`}
               >
-                {/* Save Artwork Button */}
-                <button className={`group absolute top-2 w-fit rounded bg-white p-1 active:scale-95 ${index % 2 === 0 ? "left-2" : "right-2"}`} onClick={() => saveArtwork(artwork)}>
-                  <svg className={`h-5 ${savedArtworks.includes(artwork.objectID) ? "fill-black" : ""}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M5 6.2C5 5.07989 5 4.51984 5.21799 4.09202C5.40973 3.71569 5.71569 3.40973 6.09202 3.21799C6.51984 3 7.07989 3 8.2 3H15.8C16.9201 3 17.4802 3 17.908 3.21799C18.2843 3.40973 18.5903 3.71569 18.782 4.09202C19 4.51984 19 5.07989 19 6.2V21L12 16L5 21V6.2Z"
-                      stroke="#000000"
-                      strokeWidth="2"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-                {/* Image */}
-                <img src={artwork.primaryImageSmall} onClick={() => handleImageClick(artwork.primaryImage)} alt={artwork.title} className="aspect-auto max-h-80 cursor-pointer md:max-h-96" />
+                <div className="relative">
+                  {/* Save Artwork Button */}
+                  <button className={`group absolute ${index % 2 === 0 ? "left-0" : "md:right-2"} top-2 ml-2 w-fit rounded bg-white p-1 active:scale-95`} onClick={() => saveArtwork(artwork)}>
+                    <svg className={`h-5 ${savedArtworks.includes(artwork.objectID) ? "fill-black" : ""}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M5 6.2C5 5.07989 5 4.51984 5.21799 4.09202C5.40973 3.71569 5.71569 3.40973 6.09202 3.21799C6.51984 3 7.07989 3 8.2 3H15.8C16.9201 3 17.4802 3 17.908 3.21799C18.2843 3.40973 18.5903 3.71569 18.782 4.09202C19 4.51984 19 5.07989 19 6.2V21L12 16L5 21V6.2Z"
+                        stroke="#000000"
+                        strokeWidth="2"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  {/* Image */}
+                  <img src={artwork.primaryImageSmall} onClick={() => handleImageClick(artwork.primaryImage)} alt={artwork.title} className="aspect-auto cursor-pointer md:max-h-96" />
+                </div>
                 {/* Text */}
-                <div className={`flex flex-col justify-end ${index % 2 === 0 ? "text-start" : "items-end text-end"}`}>
+                <div className={`flex flex-col items-center justify-end text-center md:items-start ${index % 2 === 0 ? "md:text-start" : "md:items-end md:text-end"}`}>
                   {selectedDepartments.includes(0) && <p className="text-sm italic text-gray-600">{artwork.department}</p>}
                   <h2 className="font-syne text-xl md:text-2xl lg:text-3xl">{artwork.title}</h2>
                   <div className="w-fit">
@@ -250,7 +252,7 @@ const App = () => {
                   <div className="w-fit">
                     <hr className="my-2 w-full" />
                     <a className="font-syne text-sm" target="_blank" href={artwork.objectURL}>
-                      {`${index % 2 === 0 ? "► " : ""}Learn more${index % 2 === 0 ? "" : " ►"}`}
+                      ► Learn more
                     </a>
                   </div>
                 </div>
