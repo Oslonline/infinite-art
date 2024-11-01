@@ -294,17 +294,8 @@ const App = () => {
                     </svg>
                   </button>
                   {/* Image */}
-                  <img
-                    src={artwork.primaryImageSmall}
-                    onClick={() => handleImageClick(artwork.primaryImage)}
-                    alt={artwork.title}
-                    className="hidden h-full max-h-96 cursor-pointer md:block"
-                  />
-                  <img
-                    src={artwork.primaryImageSmall}
-                    alt={artwork.title}
-                    className="block h-full max-h-96 cursor-default md:hidden"
-                  />
+                  <img src={artwork.primaryImageSmall} onClick={() => handleImageClick(artwork.primaryImage)} alt={artwork.title} className="hidden h-full max-h-96 cursor-pointer md:block" />
+                  <img src={artwork.primaryImageSmall} alt={artwork.title} className="block h-full max-h-96 cursor-default md:hidden" />
                 </div>
                 {/* Text */}
                 <div className={`flex flex-col items-center justify-end text-center md:items-start ${index % 2 === 0 ? "md:text-start" : "md:items-end md:text-end"}`}>
@@ -354,7 +345,7 @@ const App = () => {
             onClick={toggleFavoritesModal}
           >
             {isFavoritesModalOpen ? (
-              <svg className="h-5 rotate-90 transform duration-200 group-hover:fill-black sm:h-6 md:h-7 md:fill-gray-300" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className="h-6 rotate-90 transform fill-black duration-200 group-hover:fill-black sm:h-6 md:h-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z" />
               </svg>
             ) : (
