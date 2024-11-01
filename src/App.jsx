@@ -205,7 +205,7 @@ const App = () => {
           <h1 className="text-center font-syne text-3xl font-black lg:text-4xl xl:text-5xl 2xl:text-6xl">Discover Random Artworks</h1>
           <div className="flex flex-wrap justify-center gap-2 md:w-2/3">
             <button
-              className={`rounded border px-2 py-0.5 md:px-4 md:py-1 ${selectedDepartments.includes(0) ? "border-gray-700" : "border-gray-300 bg-gray-200"}`}
+              className={`rounded border px-2 py-0.5 md:px-4 md:py-1 ${selectedDepartments.includes(0) ? "border-gray-700" : "border-gray-300 bg-gray-200 text-gray-800"}`}
               onClick={() => handleDepartmentChange(0)}
             >
               All
@@ -263,12 +263,12 @@ const App = () => {
                     </svg>
                   </button>
                   {/* Image */}
-                  <img src={artwork.primaryImageSmall} onClick={() => handleImageClick(artwork.primaryImage)} alt={artwork.title} className="aspect-auto cursor-pointer md:max-h-96" />
+                  <img src={artwork.primaryImageSmall} onClick={() => handleImageClick(artwork.primaryImage)} alt={artwork.title} className="aspect-auto h-full cursor-pointer" />
                 </div>
                 {/* Text */}
                 <div className={`flex flex-col items-center justify-end text-center md:items-start ${index % 2 === 0 ? "md:text-start" : "md:items-end md:text-end"}`}>
                   {selectedDepartments.includes(0) && <p className="text-sm italic text-gray-600">{artwork.department}</p>}
-                  <h2 className="font-syne text-xl md:text-2xl lg:text-3xl">{artwork.title}</h2>
+                  <h2 className="font-syne text-xl md:text-2xl 2xl:text-3xl">{artwork.title}</h2>
                   <div className="w-fit">
                     <hr className="my-2 w-full" />
                     <h3 className="font-imperial text-2xl text-gray-800">{artwork.artistDisplayName || "Unknown Artist"}</h3>
@@ -290,7 +290,7 @@ const App = () => {
 
       {/* Floating Consent Div */}
       {showConsent && (
-        <div className={`fixed bottom-4 right-4 z-0 flex max-w-80 flex-col gap-2 rounded border border-gray-300 bg-white p-4 md:max-w-fit ${pulseConsent ? "animate-bounce" : ""}`}>
+        <div className={`fixed bottom-4 right-4 z-0 flex max-w-full ml-4 flex-col gap-2 rounded border border-gray-300 bg-white p-4 md:max-w-fit ${pulseConsent ? "animate-bounce" : ""}`}>
           <p className="">Would you like us to remember the projects you like?</p>
           <div className="flex justify-between gap-2 text-center">
             <button onClick={() => handleConsent(true)} className="w-full rounded border border-gray-300 duration-150 hover:border-black">
@@ -334,11 +334,11 @@ const App = () => {
               savedArtworks.map((artwork) => (
                 <div key={artwork.objectID} className="flex gap-2">
                   <div className="w-full rounded bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('${artwork.primaryImageSmall}')` }}>
-                    <div className="flex h-full w-full rounded bg-gray-200/30 p-2 md:p-4 backdrop-blur-sm">
+                    <div className="flex h-full w-full rounded bg-gray-200/30 p-2 backdrop-blur-sm md:p-4">
                       <div className="flex w-full flex-col gap-1 md:gap-2">
                         <h3 className="font-semibold">{artwork.title}</h3>
                         <p className="text-sm">{artwork.artistDisplayName}</p>
-                        <a href={artwork.objectURL} target="_blank" rel="noopener noreferrer" className="w-fit flex gap-1 items-end rounded bg-white px-1">
+                        <a href={artwork.objectURL} target="_blank" rel="noopener noreferrer" className="flex w-fit items-end gap-1 rounded bg-white px-1">
                           <svg className="h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                               d="M10.0002 5H8.2002C7.08009 5 6.51962 5 6.0918 5.21799C5.71547 5.40973 5.40973 5.71547 5.21799 6.0918C5 6.51962 5 7.08009 5 8.2002V15.8002C5 16.9203 5 17.4801 5.21799 17.9079C5.40973 18.2842 5.71547 18.5905 6.0918 18.7822C6.5192 19 7.07899 19 8.19691 19H15.8031C16.921 19 17.48 19 17.9074 18.7822C18.2837 18.5905 18.5905 18.2839 18.7822 17.9076C19 17.4802 19 16.921 19 15.8031V14M20 9V4M20 4H15M20 4L13 11"
