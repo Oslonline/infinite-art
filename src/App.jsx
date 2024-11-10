@@ -281,7 +281,7 @@ const App = () => {
                 ref={index === 0 ? firstArtworkRef : null}
                 className={`mx-5 my-20 flex flex-col items-center gap-4 md:mx-10 md:my-32 md:flex-row md:items-end md:gap-6 ${index % 2 === 0 ? "" : "bg-white md:flex-row-reverse md:items-end"}`}
               >
-                <div className="relative h-fit">
+                <div className="flex-1.5 relative h-fit">
                   {/* Save Artwork Button */}
                   <button className={`group absolute ${index % 2 === 0 ? "left-0" : "md:right-2"} top-2 ml-2 w-fit rounded bg-white p-1 active:scale-95`} onClick={() => saveArtwork(artwork)}>
                     <svg className={`h-5 ${savedArtworks.some((saved) => saved.objectID === artwork.objectID) ? "fill-black" : ""}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -298,7 +298,7 @@ const App = () => {
                   <img src={artwork.primaryImageSmall} alt={artwork.title} className="block h-full max-h-96 cursor-default md:hidden" />
                 </div>
                 {/* Text */}
-                <div className={`flex flex-col items-center justify-end text-center md:items-start ${index % 2 === 0 ? "md:text-start" : "md:items-end md:text-end"}`}>
+                <div className={`flex flex-1 flex-col items-center justify-end text-center md:items-start ${index % 2 === 0 ? "md:text-start" : "md:items-end md:text-end"}`}>
                   {selectedDepartments.includes(0) && <p className="text-sm italic text-gray-600">{artwork.department}</p>}
                   <h2 className="font-syne text-xl md:text-2xl 2xl:text-3xl">{artwork.title}</h2>
                   <div className="w-fit">
