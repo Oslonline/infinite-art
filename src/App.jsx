@@ -272,6 +272,10 @@ const App = () => {
         </div>
       </div>
 
+      <a className="flex items-center justify-center mt-7 md:mt-14" href="https://www.producthunt.com/posts/infinite-art?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-infinite&#0045;art" target="_blank">
+        <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=597823&theme=neutral" alt="" width="250px" height="54px" />
+      </a>
+
       {/* Artworks Section */}
       <div className="flex flex-col" id="artwork-container">
         {showArtworks && artworks.length > 0
